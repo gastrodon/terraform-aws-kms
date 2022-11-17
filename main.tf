@@ -294,7 +294,7 @@ locals {
 }
 
 resource "aws_kms_alias" "this" {
-  for_each = { for k, v in merge(local.aliases, var.computed_aliases) : k => v if var.create }
+  for_each = var.create ? { for k, v in merge(local.aliases, var.computed_aliases) : k => v } : {}
 
   name          = var.aliases_use_name_prefix ? null : "alias/${each.value.name}"
   name_prefix   = var.aliases_use_name_prefix ? "alias/${each.value.name}-" : null
